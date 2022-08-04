@@ -1,6 +1,12 @@
-version: "3.9" 
+version: "3.9"
 services:
-  redis:
+  redis-stack:
     image: redis/redis-stack-server:latest
     ports:
       - "6379:6379"
+    networks:
+      - redisearch
+  
+networks:
+  redisearch:
+    driver: bridge
