@@ -4,7 +4,7 @@ const merchantsSearchClient = require('../merchantsSearchClient');
 async function main() {
   const merchantName = process.argv[2];
   if (!merchantName) {
-    errorExit('missing merchant name');
+    throw('missing merchant name');
   }
 
   await merchantsSearchClient._connect();

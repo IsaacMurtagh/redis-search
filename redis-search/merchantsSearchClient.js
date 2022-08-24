@@ -14,23 +14,34 @@ module.exports = {
     }
   },
 
-  async createMerchantsIndex() {
+  async createMerchantsSearchIndex() {
     await this._connect();
     return client.ft.create(merchantsIndex, {
       '$.name': {
         type: SchemaFieldTypes.TEXT,
         SORTABLE: 'UNF'
-      }, 
+      },
     }, {
       ON: 'JSON',
       PREFIX: 'merchants'
     }).catch(err => {
       if (err.message === 'Index already exists') {
-        console.log('Index already exists');
+        console.log(err.message);
       } else {
         throw err
       }
     });
+  },
+
+  async addMerchantToGeoIndex(merchant) {
+    console.log(merchant);
+    await this._connect();
+    await client.GEOADD('merchants', {
+      longitude: String(merchant.lng),
+      latitude: String(merchant.lat),
+      member: merchant.id
+    })
+    return;
   },
 
   async setMerchant(merchant) {
@@ -43,7 +54,18 @@ module.exports = {
     return client.ft.search(merchantsIndex, name);
   },
 
-  async searchMerchantByLatLng({ lat, lng }) {
-    
+  async searchMerchantByGeo({ lat, lng, radius }) {
+    await this._connect();
+    return client.sendCommand([ 
+      'GEOSEARCH',
+      'merchants',
+      'FROMLONLAT',
+      lng,
+      lat,
+      'BYRADIUS',
+      radius,
+      'km',
+      'ASC'
+    ]);
   }
 }

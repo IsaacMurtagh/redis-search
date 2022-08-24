@@ -2,18 +2,16 @@
 const merchantsSearchClient = require('../merchantsSearchClient');
 
 async function main() {
-  const lat = process.argv[2];
-  const lng = process.argv[3];
-  if (!lat || !lng) {
-    console.error('missing lat or lng');
-    process.exit(1);
+  const lng = process.argv[2];
+  const lat = process.argv[3];
+  const radius = process.argv[4];
+  if (!lng || !lat || !radius) {
+    throw('missing lng, lat, or ');
   }
 
-  console.log(lat, lng);
-
   await merchantsSearchClient._connect();
-  const results = await merchantsSearchClient.searchMerchantByLatLng({ lat, lng });
-  return results.documents.map(m => m.value);
+  return await merchantsSearchClient.searchMerchantByGeo({ lat, lng, radius });
+  // return results.documents.map(m => m.value);
 }
 
 main()
