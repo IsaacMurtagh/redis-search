@@ -34,7 +34,6 @@ module.exports = {
   },
 
   async addMerchantToGeoIndex(merchant) {
-    console.log(merchant);
     await this._connect();
     await client.GEOADD('merchants', {
       longitude: String(merchant.lng),
@@ -49,9 +48,14 @@ module.exports = {
     return client.json.set(`merchants:${merchant.id}`, '$', merchant);
   },
 
-  async searchMerchantByName(name) {
+  async getMerchant(id) {
     await this._connect();
-    return client.ft.search(merchantsIndex, name);
+    return client.json.get(`merchants:${id}`);
+  },
+
+  async searchMerchantIndex(query) {
+    await this._connect();
+    return client.ft.search(merchantsIndex, query);
   },
 
   async searchMerchantByGeo({ lat, lng, radius }) {
@@ -64,7 +68,7 @@ module.exports = {
       lat,
       'BYRADIUS',
       radius,
-      'km',
+      'm',
       'ASC'
     ]);
   }

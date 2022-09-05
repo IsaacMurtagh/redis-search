@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const merchantsSearchClient = require('../merchantsSearchClient');
+const merchantsSearchClient = require('../src/merchantsSearchClient');
 
 async function main() {
   const merchantName = process.argv[2];
@@ -8,7 +8,7 @@ async function main() {
   }
 
   await merchantsSearchClient._connect();
-  const results = await merchantsSearchClient.searchMerchantByName(merchantName);
+  const results = await merchantsSearchClient.searchMerchantIndex(merchantName);
   return results.documents.map(m => m.value);
 }
 

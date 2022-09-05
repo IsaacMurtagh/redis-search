@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const merchantsSearchClient = require('../merchantsSearchClient');
+const merchantsSearchClient = require('../src/merchantsSearchClient');
 
 async function main() {
   const lng = process.argv[2];
