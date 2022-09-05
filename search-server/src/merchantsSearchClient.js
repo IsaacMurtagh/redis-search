@@ -55,7 +55,12 @@ module.exports = {
 
   async searchMerchantIndex(query) {
     await this._connect();
-    return client.ft.search(merchantsIndex, query);
+    return client.ft.search(merchantsIndex, query, {
+      LIMIT: {
+        from: '0',
+        size: '100'
+      }
+    });
   },
 
   async searchMerchantByGeo({ lat, lng, radius }) {
