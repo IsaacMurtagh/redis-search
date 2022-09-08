@@ -49,7 +49,7 @@ module.exports = {
 
   async setMerchant(merchant) {
     await this._connect();
-    return client.sendCommand(['HSET', `merchants:${merchant.id}`, '1.0', 'FIELDS', ...merchant.toRedisFields()])
+    return client.sendCommand(['HSET', `merchants:${merchant.id}`, ...merchant.toRedisFields()])
       .catch(console.error);
   },
 

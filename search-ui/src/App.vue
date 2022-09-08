@@ -1,8 +1,7 @@
 <template>
-  <nav>
-    <router-link to="/search-by-name">Search By Name</router-link> |
-    <router-link to="/search-by-location">Search By Location</router-link> |
-  </nav>
+  <h1>
+    RediSearch Demo
+  </h1>
   <router-view/>
 </template>
 
@@ -15,16 +14,9 @@
   color: #2c3e50;
 }
 
-nav {
+h1 {
   padding: 30px;
-}
-
-nav a {
   font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>

@@ -6,6 +6,7 @@ module.exports = class Merchant {
     this.test = props.test;
     this.region = props.region;
     this.city = props.city;
+    this.createdAt = props.createdAt;
     this.lngLat = props.latitude && props.longitude && `${props.longitude},${props.latitude}`;
   }
 
@@ -13,7 +14,8 @@ module.exports = class Merchant {
     return new Merchant({
       ...data,
       test: !!data.test,
-      id: data.merchantId
+      id: data.merchantId,
+      createdAt: data.createdAt && new Date(data.createdAt).getTime(),
     });
   }
 
