@@ -4,6 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
+const Merchant = require('./Merchant');
 const searchClient = require('./merchantsSearchClient');
 
 const app = express();
@@ -14,33 +15,19 @@ app.use(bodyParser.json());
 app.use(cors())
 
 app.post('/init', async (req, res) => {
-  const merchants = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../ merchants.json'), 'UTF-8'));
+  const merchants = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../ merchants.json'), 'UTF-8'))
   await searchClient._connect();
   await searchClient.createMerchantsSearchIndex();
   await Promise.all(merchants.map(async merchant => {
-    await searchClient.setMerchant(merchant);
-    if (merchant.lng && merchant.lat) {
-      await searchClient.addMerchantToGeoIndex(merchant);
-    }
+    return searchClient.setMerchant(Merchant.fromJson(merchant));
   }));
   return res.send('OK');
 });
 
-app.get('/merchants/search', async (req, res) => {
-  const query = req.query.q || ''
+app.get('/merchants', async (req, res) => {
+  const query = req.query.q || '*'
   const results = await searchClient.searchMerchantIndex(query);
   return res.send(results);
-});
-app.get('/merchants/location', async (req, res) => {
-  const { lng, lat, radius } = req.query;
-  const results = await searchClient.searchMerchantByGeo({ lat, lng, radius });
-  const merchants = await Promise.all(results.map(async id => searchClient.getMerchant(id)))
-  return res.send(merchants);
-});
-
-app.get('/merchants/:id', async (req, res) => {
-  const merchant = await searchClient.getMerchant(req.params.id);
-  return res.send(merchant);
 });
 
 

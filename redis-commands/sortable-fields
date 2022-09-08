@@ -1,0 +1,9 @@
+FT.CREATE merchantIdx2 PREFIX 1 merchant: SCHEMA name TEXT SORTABLE lngLat GEO
+
+HSET "merchant:603d6d1bd09ed50007aff9d4" 1.0 FIELDS name "aakesideCinemasLtd" id "603d6d1bd09ed50007aff9d4"
+HSET "merchant:6297e39221a6000009994770" 1.0 FIELDS name "Lands of the Farm" id "6297e39221a6000009994770"
+HSET "merchant:6172101f3adb790006551bbb" 1.0 FIELDS name "pangton Motor Lodge Enterprises Limited" id "6172101f3adb790006551bbb"
+HSET "merchant:6065265908ee0e0006969a66" 1.0 FIELDS name "datitude 37" id "6065265908ee0e0006969a66"
+
+FT.SEARCH merchantIdx2 * SORTBY name
+FT.SEARCH merchantIdx2 * SORTBY name DESC

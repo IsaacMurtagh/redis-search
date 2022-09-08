@@ -1,4 +1,4 @@
-const { createClient, SchemaFieldTypes } = require('redis');
+const { createClient, SchemaFieldTypes, } = require('redis');
 const client = createClient();
 client.on('error', (err) => console.log('Redis Client Error', err));
 
@@ -17,13 +17,27 @@ module.exports = {
   async createMerchantsSearchIndex() {
     await this._connect();
     return client.ft.create(merchantsIndex, {
-      '$.name': {
+      'name': {
         type: SchemaFieldTypes.TEXT,
         SORTABLE: 'UNF'
       },
+      'city': {
+        type: SchemaFieldTypes.TAG,
+      },
+      'region': {
+        type: SchemaFieldTypes.TAG,
+      },
+      'test': {
+        type: SchemaFieldTypes.TAG,
+      },
+      'lngLat': {
+        type: SchemaFieldTypes.GEO,
+      },
+      'createdAt': {
+        type: SchemaFieldTypes.NUMERIC,
+      }
     }, {
-      ON: 'JSON',
-      PREFIX: 'merchants'
+      PREFIX: 'merchants:'
     }).catch(err => {
       if (err.message === 'Index already exists') {
         console.log(err.message);
@@ -33,19 +47,10 @@ module.exports = {
     });
   },
 
-  async addMerchantToGeoIndex(merchant) {
-    await this._connect();
-    await client.GEOADD('merchants', {
-      longitude: String(merchant.lng),
-      latitude: String(merchant.lat),
-      member: merchant.id
-    })
-    return;
-  },
-
   async setMerchant(merchant) {
     await this._connect();
-    return client.json.set(`merchants:${merchant.id}`, '$', merchant);
+    return client.sendCommand(['HSET', `merchants:${merchant.id}`, '1.0', 'FIELDS', ...merchant.toRedisFields()])
+      .catch(console.error);
   },
 
   async getMerchant(id) {
@@ -62,19 +67,4 @@ module.exports = {
       }
     });
   },
-
-  async searchMerchantByGeo({ lat, lng, radius }) {
-    await this._connect();
-    return client.sendCommand([ 
-      'GEOSEARCH',
-      'merchants',
-      'FROMLONLAT',
-      lng,
-      lat,
-      'BYRADIUS',
-      radius,
-      'm',
-      'ASC'
-    ]);
-  }
 }

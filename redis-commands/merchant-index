@@ -1,0 +1,12 @@
+FT.CREATE idx:merchant7 SCHEMA 
+name TEXT SORTABLE 
+city TAG 
+region TAG 
+test TAG 
+lngLat GEO 
+createdAt NUMERIC
+
+HSET ADD "merchant:62f2eaab3c64dc6b86b4011c" FIELDS accountId "PvZLaZLK2whqzZxDr1waMv" name "Nail Shop" merchantId "62f2eaab3c64dc6b86b4011c" test "true" region "NZ" city "Christchurch" postCode "8013" suburb "Christchurch Central City" lngLat 172.629505,-43.5237782 createdAt 1660086955008
+
+FT.SEARCH idx:merchant *
+FT.SEARCH idx:merchant "@createdAt:[1660086955007, inf]"

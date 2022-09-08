@@ -1,0 +1,29 @@
+FT.CREATE merchantIdx1 SCHEMA 
+  name TEXT 
+  lngLat GEO
+
+FT.ADD merchantIdx1 615cac15a98c440006f3697b 1.0 FIELDS id "615cac15a98c440006f3697b" name "Lake Brunner Lodge" lngLat 171.3976317,-42.6382706
+FT.ADD merchantIdx1 6172101f3adb790006551bbb 1.0 FIELDS id "6172101f3adb790006551bbb" name "Langton Motor Lodge Enterprises Limited" lngLat 171.2476806,-44.3920285
+
+-- Fuzzy Match merchants that contain lake
+FT.SEARCH merchantIdx1 "Lake"
+-- Fuzzy Match merchants that contain la
+FT.SEARCH merchantIdx1 "Lodge"
+-- 1) "6172101f3adb790006551bbb"
+-- 2) 1) "id"
+--    2) "6172101f3adb790006551bbb"
+--    3) "name"
+--    4) "Langton Motor Lodge Enterprises Limited"
+--    5) "lngLat"
+--    6) "171.2476806,-44.3920285"
+-- 3) "615cac15a98c440006f3697b"
+-- 4) 1) "id"
+--    2) "615cac15a98c440006f3697b"
+--    3) "name"
+--    4) "Lake Brunner Lodge"
+--    5) "lngLat"
+--    6) "171.3976317,-42.6382706"
+
+-- Search merchants based on a geo location
+FT.SEARCH merchantIdx1 "@lngLat:[171.3976317 -42.6382706 100 m]"
+FT.SEARCH merchantIdx1 "@lngLat:[171.3976317 -42.6382706 1000 km]"
