@@ -26,7 +26,8 @@ app.post('/init', async (req, res) => {
 
 app.get('/merchants', async (req, res) => {
   const query = req.query.q || '*'
-  const results = await searchClient.searchMerchantIndex(query);
+  console.log('Merchant search query for ' + JSON.stringify(req.query));
+  const results = await searchClient.searchMerchantIndex({ query });
   return res.send(results);
 });
 

@@ -19,7 +19,7 @@ module.exports = {
     return client.ft.create(merchantsIndex, {
       'name': {
         type: SchemaFieldTypes.TEXT,
-        SORTABLE: 'UNF'
+        sortable: true
       },
       'city': {
         type: SchemaFieldTypes.TAG,
@@ -53,18 +53,13 @@ module.exports = {
       .catch(console.error);
   },
 
-  async getMerchant(id) {
-    await this._connect();
-    return client.json.get(`merchants:${id}`);
-  },
-
-  async searchMerchantIndex(query) {
+  async searchMerchantIndex({ query, sortBy, sort }) {
+    console.log({ query, sortBy, sort });
     await this._connect();
     return client.ft.search(merchantsIndex, query, {
-      LIMIT: {
-        from: '0',
-        size: '100'
-      }
+    }).catch(err => {
+      console.error(err);
+      // throw err;
     });
   },
 }

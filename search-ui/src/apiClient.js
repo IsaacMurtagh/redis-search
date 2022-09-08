@@ -6,9 +6,9 @@ const axiosClient = axios.create({
 });
 
 export default {
-  async searchMerchants(q) {
-    return axiosClient.get('merchants/search', {
-      params: { q }
+  async searchMerchants({ q, sortBy, sort }) {
+    return axiosClient.get('merchants', {
+      params: { q, sortBy, sort }
     });
   }
 };

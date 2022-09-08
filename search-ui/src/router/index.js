@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SearchLocationView from '../views/SearchLocationView.vue'
 import SearchNameView from '../views/SearchNameView.vue'
 
 const routes = [
@@ -9,11 +8,6 @@ const routes = [
     name: 'Search By Name',
     component: SearchNameView
   },
-  {
-    path: '/search-by-location',
-    name: 'Search By Location',
-    component: SearchLocationView
-  }
 ]
 
 const router = createRouter({
